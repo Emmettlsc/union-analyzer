@@ -5,13 +5,17 @@ import os
 if os.name == 'nt':
     pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
-img = cv2.imread('test14.png')
+img = cv2.imread('testFull.jpg', cv2.IMREAD_GRAYSCALE)
+#(thresh, img) = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
 text = pytesseract.image_to_string(img)
 print(text)
-height, width, channels = img.shape
+height, width = img.shape
 n = 28
 
+
+'''
 for i in range(n):
+    #test14.png
     imgCrop = img[int(i*height/n):int((i+1)*height/n),]
     textCrop = pytesseract.image_to_string(imgCrop)
     x = -10
@@ -24,8 +28,8 @@ for i in range(n):
     cv2.imshow(textCrop, imgCrop)
     cv2.waitKey(0)
 
-'''
-h, w, c = img.shape
+
+h, w = img.shape
 boxes = pytesseract.image_to_boxes(img) 
 for b in boxes.splitlines():
     b = b.split(' ')
@@ -33,3 +37,4 @@ for b in boxes.splitlines():
 cv2.imshow('img', img)
 cv2.waitKey(0)
 '''
+
