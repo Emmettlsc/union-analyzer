@@ -63,6 +63,12 @@ def iterate_crop_to_text(lineRefPt):
     elif k == ord('s'):
         lineRefPt[0] = (lineRefPt[0][0], lineRefPt[0][1]+1)
         lineRefPt[1] = (lineRefPt[1][0], lineRefPt[1][1]+1)
+    elif k == ord('v'):
+        lineRefPt[0] = (lineRefPt[0][0], lineRefPt[0][1]+10)
+        lineRefPt[1] = (lineRefPt[1][0], lineRefPt[1][1]+10)
+    elif k == ord('g'):
+        lineRefPt[0] = (lineRefPt[0][0], lineRefPt[0][1]-10)
+        lineRefPt[1] = (lineRefPt[1][0], lineRefPt[1][1]-10)
     elif k == ord('w'):
         lineRefPt[0] = (lineRefPt[0][0], lineRefPt[0][1]-1)
         lineRefPt[1] = (lineRefPt[1][0], lineRefPt[1][1]-1)
