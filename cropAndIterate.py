@@ -1,11 +1,38 @@
 import cv2
 import pytesseract
 import numpy as np
+import xlwings as xw #excel
+import pandas as pd #excel - not used atm
+from spellchecker import SpellChecker #spell check 
 import os
 if os.name == 'nt':
     pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 drawing = False
 colSelected = False
+
+wb = xw.Book('fill.xlsx')
+sheet = wb.sheets['Sheet1']
+spell = SpellChecker()
+
+rownum = 1 # used to iterate down column 
+cache = "" # used to store spell-checked name 
+
+def spellcheck (str):
+    arr = str.split()
+    for i in range(len(arr)):
+        arr[i]=arr[i].lower()
+    misspelled = spell.unknown(arr)
+    for word in misspelled: 
+        if word != 'co.':
+            fix = spell.correction(word)
+            arr[arr.index(word)] = fix
+    for elm in range(len(arr)):
+        arr[elm] = arr[elm].capitalize()
+    txt = (' '.join(arr))
+    global cache
+    cache = txt
+    return txt
+
 
 def crop_to_text(refPt):
     imgCrop = img[refPt[0][1]:refPt[1][1], refPt[0][0]:refPt[1][0]]
@@ -21,7 +48,7 @@ def crop_to_text(refPt):
         value=[255,255,255]
     )
     text = pytesseract.image_to_string(imgCrop)
-    print(text)
+    print(spellcheck(text))
     print('---------------')
     
 def iterate_crop_to_text(lineRefPt):
@@ -40,9 +67,13 @@ def iterate_crop_to_text(lineRefPt):
         lineRefPt[0] = (lineRefPt[0][0], lineRefPt[0][1]-1)
         lineRefPt[1] = (lineRefPt[1][0], lineRefPt[1][1]-1)
     elif k == 13: #enter
+        global rownum
+        sheet.range((rownum,2)).value = cache
+        rownum+=1
         height = lineRefPt[1][1] - lineRefPt[0][1]
         lineRefPt[0] = (lineRefPt[0][0], lineRefPt[0][1]+height)
         lineRefPt[1] = (lineRefPt[1][0], lineRefPt[1][1]+height)
+
     if(lineRefPt[1][1] < img.shape[0]):
         iterate_crop_to_text(lineRefPt)
     
