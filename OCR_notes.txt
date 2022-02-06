@@ -1,0 +1,9 @@
+adding white space below text seems to improve recognition
+
+looking at text line by line greatly improves recognition
+
+higher quality improves recognition
+
+company names are much easier to read than location. Location is much easier than employees
+
+recognizable text tends to come in groups
